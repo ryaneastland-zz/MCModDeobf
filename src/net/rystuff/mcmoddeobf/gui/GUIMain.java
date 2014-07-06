@@ -30,10 +30,10 @@ public class GuiMain extends JPanel implements ActionListener {
         add(this.source);
         source.addActionListener(this);
         add(versionDropDown);
-        add(this.run);
-        run.addActionListener(this);
         add(this.output);
         output.addActionListener(this);
+        add(this.run);
+        run.addActionListener(this);
     }
 
     @Override
