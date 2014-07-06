@@ -29,6 +29,7 @@
     </target>
 
     <target name="getLibs" depends="init">
+        <get src="http://central.maven.org/maven2/commons-io/commons-io/2.4/commons-io-2.4.jar" dest="${libs.dir}/commons-io-2.4.jar"/>
         <get src="http://central.maven.org/maven2/net/lingala/zip4j/zip4j/1.3.2/zip4j-1.3.2.jar" dest="${libs.dir}/zip4j-1.3.2.jar"/>
     </target>
 
