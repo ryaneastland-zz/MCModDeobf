@@ -4,6 +4,7 @@ import net.rystuff.mcmoddeobf.MCModDeobf;
 import net.rystuff.mcmoddeobf.Util;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,9 +15,12 @@ public class GuiMain extends JPanel implements ActionListener {
     public static String[] mcVersions = {"1.6.4", "1.7.2", "1.7.10"};
     public static String mcVersion;
 
+    public static JFileChooser outputFolder = new JFileChooser();
+
     private JButton source = new JButton("Select source file zip/jar");
     private JButton run = new JButton("Deobfuscate");
-    public static JComboBox versionDropDown = new JComboBox(mcVersions);
+    private JButton output = new JButton("Output zip");
+    public static JComboBox<String> versionDropDown = new JComboBox<String>(mcVersions);
 
     public GuiMain(JFrame frame) {
         JPanel panel = new JPanel();
@@ -28,12 +32,16 @@ public class GuiMain extends JPanel implements ActionListener {
         add(versionDropDown);
         add(this.run);
         run.addActionListener(this);
+        add(this.output);
+        output.addActionListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.source) {
             JFileChooser chooser = new JFileChooser();
+            chooser.setAcceptAllFileFilterUsed(false);
+            chooser.setFileFilter(new FileNameExtensionFilter("Archive files" , "zip", "jar"));
             int returnVal = chooser.showOpenDialog(null);
             if (returnVal == 0) {
                 MCModDeobf.source = chooser.getSelectedFile();
@@ -50,7 +58,17 @@ public class GuiMain extends JPanel implements ActionListener {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-
+            Util.Zip();
+        }
+        if (e.getSource() == this.output) {
+            outputFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            outputFolder.setAcceptAllFileFilterUsed(false);
+            outputFolder.setFileFilter(new FileNameExtensionFilter("Archive files" , "zip", "jar"));
+            int returnVal = outputFolder.showSaveDialog(null);
+            if (returnVal == 0) {
+                Util.outputZip = outputFolder.getSelectedFile();
+                System.out.println(Util.outputZip);
+            }
         }
     }
 }

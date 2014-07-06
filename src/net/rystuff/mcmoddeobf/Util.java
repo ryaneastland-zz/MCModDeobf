@@ -2,9 +2,10 @@ package net.rystuff.mcmoddeobf;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
 import net.rystuff.mcmoddeobf.gui.GuiMain;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,8 @@ public class Util {
     public static File fernflower = new File(tempDir + "fernflower");
     public static File outputFile = new File(tempDir + "deobfOut");
     public static String outputFile1 = outputFile.toString();
+    public static File outputZip;
+    public static ZipFile zipFile;
 
     public static void preDeobf() {
         System.out.println(Deobf);
@@ -69,6 +72,24 @@ public class Util {
             System.out.println("FernFlower Deobfuscating to: " + outputFile);
         } catch (Exception e) {
             System.out.println("Error using fernflower to deobfucate: " + e);
+        }
+    }
+
+    public static void Zip() {
+        try {
+            if (outputZip.toString().toLowerCase().contains(".zip")){
+                zipFile = new ZipFile(outputZip);
+            } else if (outputZip.toString().toLowerCase().contains(".jar")) {
+                zipFile = new ZipFile(outputZip);
+            } else {
+                zipFile = new ZipFile(outputZip);
+            }
+            ZipParameters parameters = new ZipParameters();
+            parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+            parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+            zipFile.createZipFileFromFolder(outputFile1, parameters, true, 10485760);
+        } catch (ZipException e) {
+            e.printStackTrace();
         }
     }
 }
