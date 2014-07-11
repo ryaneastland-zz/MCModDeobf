@@ -8,11 +8,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class GuiMain extends JPanel implements ActionListener {
 
 
-    public static String[] mcVersions = {"1.6.4", "1.7.2", "1.7.10"};
+    public static String[] mcVersions = {"1.7.10", "1.7.2", "1.6.4"};
     public static String mcVersion;
 
     public static JFileChooser outputFolder = new JFileChooser();
@@ -48,9 +49,15 @@ public class GuiMain extends JPanel implements ActionListener {
             }
         }
         if (e.getSource() == this.run) {
-            Util.fernflower.mkdir();
             mcVersion = versionDropDown.getSelectedItem().toString();
-            Util.download("http://rystuff.net/downloads/fernflower/fernflower-" + mcVersion + ".jar", Util.tempDir + "fernflower-" + mcVersion + ".jar");
+            if (!new File(Util.tempDir + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
+            {
+                Util.fernflower.mkdir();
+                Util.download("http://rystuff.net/downloads/fernflower/fernflower-" + mcVersion + ".jar", Util.tempDir + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar");
+            }else if (new File(Util.tempDir + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
+            {
+                System.out.println("Fernflower already there");
+            }
             Util.preDeobf();
             Util.unZip(MCModDeobf.source.toString());
             try {

@@ -82,11 +82,12 @@ public class Util {
             } else if (outputZip.toString().toLowerCase().contains(".jar")) {
                 zipFile = new ZipFile(outputZip);
             } else {
-                zipFile = new ZipFile(outputZip);
+                zipFile = new ZipFile(outputZip + ".zip");
             }
             ZipParameters parameters = new ZipParameters();
             parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
             parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+            parameters.setIncludeRootFolder(false);
             zipFile.createZipFileFromFolder(outputFile1, parameters, true, 10485760);
         } catch (ZipException e) {
             e.printStackTrace();
