@@ -20,6 +20,7 @@ public class Util {
     public static String outputFile1 = outputFile.toString();
     public static File outputZip;
     public static ZipFile zipFile;
+    public static String Fernflower = Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + GuiMain.mcVersion + ".jar";
 
     public static void preDeobf() {
         System.out.println(Deobf);
@@ -62,11 +63,10 @@ public class Util {
 
     public static void Deobf() throws Exception
     {
-
         outputFile.mkdir();
         try {
             Process p = Runtime.getRuntime().exec(
-                    "cmd /c start " + tempDir.toString() + "fernflower-" + GuiMain.mcVersion + ".jar " + Deobf + " " + outputFile1);
+                    "cmd /c start " + tempDir.toString() + "fernflower" + File.separator + "fernflower-" + GuiMain.mcVersion + ".jar " + Deobf + " " + outputFile1);
             System.out.println("Deobfuscating using fernflower");
             p.waitFor();
             System.out.println("FernFlower Deobfuscating to: " + outputFile);
