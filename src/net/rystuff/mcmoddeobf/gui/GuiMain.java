@@ -22,6 +22,7 @@ public class GuiMain extends JPanel implements ActionListener {
     private JButton run = new JButton("Deobfuscate");
     private JButton output = new JButton("Output zip");
     public static JComboBox<String> versionDropDown = new JComboBox<String>(mcVersions);
+    public static String Fernflower = Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar";
 
     public GuiMain(JFrame frame) {
         JPanel panel = new JPanel();
@@ -50,11 +51,11 @@ public class GuiMain extends JPanel implements ActionListener {
         }
         if (e.getSource() == this.run) {
             mcVersion = versionDropDown.getSelectedItem().toString();
-            if (!new File(Util.tempDir + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
+            if (!new File(Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
             {
                 Util.fernflower.mkdir();
-                Util.download("http://rystuff.net/downloads/fernflower/fernflower-" + mcVersion + ".jar", Util.tempDir + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar");
-            }else if (new File(Util.tempDir + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
+                Util.download("http://rystuff.net/downloads/fernflower/fernflower-" + mcVersion + ".jar", Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar");
+            }else if (new File(Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
             {
                 System.out.println("Fernflower already there");
             }
