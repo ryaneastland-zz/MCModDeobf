@@ -1,12 +1,12 @@
 package net.rystuff.mcmoddeobf;
 
+import net.rystuff.mcmoddeobf.gui.GuiMain;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
+import java.util.List;
 
 public class Util {
 
@@ -100,7 +100,30 @@ public class Util {
         System.out.println("Decompiled!");
     }
 
-    public static void deobf() {
+    public static void deobf() throws IOException {
+        File dir = new File(decompString);
 
+        System.out.println("Getting all files in " + dir.getCanonicalPath() + " including those in subdirectories");
+        List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        for (File file : files) {
+            System.out.println("file: " + file.getCanonicalPath());
+            try {
+                String csvFile  = "C:\\Users\\ryan\\Documents\\methods.csv";
+                BufferedReader br = null;
+                String line = "";
+                String csvSplitBy = ",";
+                br = new BufferedReader(new FileReader(csvFile));
+                while ((line = br.readLine()) != null) {
+                    String[] split = line.split(csvSplitBy);
+                    System.out.println("Function = " + split[0] + ", name = " + split[1]);
+                    String content = FileUtils.readFileToString(new File(file.toString()));
+                    FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

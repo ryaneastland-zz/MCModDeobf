@@ -62,6 +62,11 @@ public class GuiMain extends JPanel implements ActionListener {
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
+            try {
+                Util.deobf();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
         if (e.getSource() == this.output) {
             outputFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
