@@ -8,7 +8,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.IOException;
 
 public class GuiMain extends JPanel implements ActionListener {
 
@@ -22,7 +22,6 @@ public class GuiMain extends JPanel implements ActionListener {
     private JButton run = new JButton("Deobfuscate");
     private JButton output = new JButton("Output zip");
     public static JComboBox<String> versionDropDown = new JComboBox<String>(mcVersions);
-    public static String Fernflower = Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar";
 
     public GuiMain(JFrame frame) {
         JPanel panel = new JPanel();
@@ -46,27 +45,23 @@ public class GuiMain extends JPanel implements ActionListener {
             chooser.setFileFilter(new FileNameExtensionFilter("Archive files" , "zip", "jar"));
             int returnVal = chooser.showOpenDialog(null);
             if (returnVal == 0) {
-                MCModDeobf.source = chooser.getSelectedFile();
+                Util.inputZipFile = chooser.getSelectedFile();
             }
         }
         if (e.getSource() == this.run) {
             mcVersion = versionDropDown.getSelectedItem().toString();
-            if (!new File(Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
+            if (!Util.decompilerFile.exists())
             {
-                Util.fernflower.mkdir();
-                Util.download("http://rystuff.net/downloads/fernflower/fernflower-" + mcVersion + ".jar", Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar");
-            }else if (new File(Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + mcVersion + ".jar").exists())
-            {
-                System.out.println("Fernflower already there");
+               Util.download("https://bitbucket.org/mstrobel/procyon/downloads/procyon-decompiler-0.5.25.jar", Util.decompilerString);
+            } else {
+
             }
-            Util.preDeobf();
-            Util.unZip(MCModDeobf.source.toString());
+            Util.init();
             try {
-                Util.Deobf();
+                Util.decompile();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
-            Util.Zip();
         }
         if (e.getSource() == this.output) {
             outputFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -74,8 +69,8 @@ public class GuiMain extends JPanel implements ActionListener {
             outputFolder.setFileFilter(new FileNameExtensionFilter("Archive files" , "zip", "jar"));
             int returnVal = outputFolder.showSaveDialog(null);
             if (returnVal == 0) {
-                Util.outputZip = outputFolder.getSelectedFile();
-                System.out.println(Util.outputZip);
+                Util.outputZipFile = outputFolder.getSelectedFile();
+                System.out.println(Util.outputZipFile);
             }
         }
     }

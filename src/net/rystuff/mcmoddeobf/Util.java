@@ -1,36 +1,69 @@
 package net.rystuff.mcmoddeobf;
 
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-import net.rystuff.mcmoddeobf.gui.GuiMain;
 import org.apache.commons.io.FileUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 public class Util {
-    public static String tempDir = System.getProperty("java.io.tmpdir");
-    public static File Deobf = new File(tempDir + "Deobf");
-    public static String Deobf2 = Deobf.getAbsolutePath();
-    public static File fernflower = new File(tempDir + "fernflower");
-    public static File outputFile = new File(tempDir + "deobfOut");
-    public static String outputFile1 = outputFile.toString();
-    public static File outputZip;
-    public static ZipFile zipFile;
-    public static String Fernflower = Util.tempDir + File.separator + "fernflower" + File.separator + "fernflower-" + GuiMain.mcVersion + ".jar";
 
-    public static void preDeobf() {
-        System.out.println(Deobf);
-        try {
-            FileUtils.deleteDirectory(Deobf);
-        } catch (IOException e) {
-            e.printStackTrace();
+    // System Temp directory
+    public static String tempDir = System.getProperty("java.io.tmpdir");
+
+    // MCModDeobf base temp directory
+    public static String baseDir = tempDir + "MCModDeobf";
+    public static File baseDirFile = new File(baseDir);
+
+    // Decompile Temp directory
+    public static String decompString = baseDir + File.separator + "decomp";
+    public static File decompFile = new File(decompString);
+
+    // Deobf Temp directory
+    public static String deobfString = baseDir + File.separator + "deobf";
+    public static File deobfFile = new File(deobfString);
+
+    // Path to Decompiler
+    public static String decompilerString = baseDir + File.separator + "decompiler.jar";
+    public static File decompilerFile = new File(decompilerString);
+
+    // Output zip
+    public static File outputZipFile;
+
+    // Input file
+    public static File inputZipFile;
+
+    // Initialization function
+    public static void init() {
+        // Prints out MCModDeobf temp directory location
+        System.out.println("MCModDeobf temp directory location: " + baseDir);
+
+        // Checks if decompFile exists and is a directory
+        if (decompFile.exists() && decompFile.isDirectory()) {
+            try {
+                FileUtils.deleteDirectory(decompFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        Deobf.mkdir();
-        System.out.println("Temp Directory created at: " + Deobf2);
+
+        // Checks if deobfFile exists and is a directory
+        if (deobfFile.exists() && deobfFile.isDirectory()) {
+            try {
+                FileUtils.deleteDirectory(deobfFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Creates temp directories
+        if (!baseDirFile.exists()) {
+            baseDirFile.mkdir();
+        }
+        decompFile.mkdir();
+        deobfFile.mkdir();
     }
 
     public static boolean download(String url, String dest)
@@ -49,48 +82,18 @@ public class Util {
         }
     }
 
-    public static void unZip(String zip) {
-        try
-        {
-            ZipFile zipFile = new ZipFile(zip);
-            zipFile.extractAll(Deobf2);
-        }
-        catch (ZipException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public static void Deobf() throws Exception
-    {
-        outputFile.mkdir();
+    public static void decompile() throws Exception {
+        System.out.println("Decompiling");
+        String line;
         try {
-            Process p = Runtime.getRuntime().exec(
-                    "cmd /c start " + tempDir.toString() + "fernflower" + File.separator + "fernflower-" + GuiMain.mcVersion + ".jar " + Deobf + " " + outputFile1);
-            System.out.println("Deobfuscating using fernflower");
-            p.waitFor();
-            System.out.println("FernFlower Deobfuscating to: " + outputFile);
-        } catch (Exception e) {
-            System.out.println("Error using fernflower to deobfucate: " + e);
-        }
-    }
-
-    public static void Zip() {
-        try {
-            if (outputZip.toString().toLowerCase().contains(".zip")){
-                zipFile = new ZipFile(outputZip);
-            } else if (outputZip.toString().toLowerCase().contains(".jar")) {
-                zipFile = new ZipFile(outputZip);
-            } else {
-                zipFile = new ZipFile(outputZip + ".zip");
+            Process p = Runtime.getRuntime().exec("java -jar " + decompilerString + " -jar " + inputZipFile + " -o " + decompString);
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null){
+                System.out.println(line);
             }
-            ZipParameters parameters = new ZipParameters();
-            parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-            parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
-            parameters.setIncludeRootFolder(false);
-            zipFile.createZipFileFromFolder(outputFile1, parameters, true, 10485760);
-        } catch (ZipException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Decompiled!");
     }
 }
