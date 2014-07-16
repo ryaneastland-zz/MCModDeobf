@@ -66,6 +66,7 @@ public class Util {
         deobfFile.mkdir();
     }
 
+    // This is the download function for use in other places
     public static boolean download(String url, String dest)
     {
         try
@@ -82,10 +83,12 @@ public class Util {
         }
     }
 
+    // Decompile function
     public static void decompile() throws Exception {
         System.out.println("Decompiling");
-        String line;
         try {
+            String line;
+            // runs the decompiler on the selected archive file
             Process p = Runtime.getRuntime().exec("java -jar " + decompilerString + " -jar " + inputZipFile + " -o " + decompString);
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null){
@@ -95,5 +98,9 @@ public class Util {
             e.printStackTrace();
         }
         System.out.println("Decompiled!");
+    }
+
+    public static void deobf() {
+
     }
 }
