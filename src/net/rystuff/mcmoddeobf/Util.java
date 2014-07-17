@@ -1,18 +1,13 @@
 package net.rystuff.mcmoddeobf;
 
 import argo.jdom.*;
-import argo.saj.InvalidSyntaxException;
 import net.rystuff.mcmoddeobf.gui.GuiMain;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import sun.org.mozilla.javascript.internal.json.JsonParser;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class Util {
 
