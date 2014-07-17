@@ -19,8 +19,12 @@ public class MCModDeobf extends JFrame{
     public static JsonRootNode config;
 
     public MCModDeobf() {
+        if (new File(Util.baseDir + File.separator + "config.json").exists()){
+            new File(Util.baseDir + File.separator + "config.json").delete();
+        }
+        Util.download("http://rystuff.net/downloads/deobf/config.json", Util.baseDir + File.separator + "config.json");
         try {
-            config = new JdomParser().parse(new FileReader(new File("C:\\Users\\ryan\\Documents\\GitHub\\MCModDeobf\\config.json")));
+            config = new JdomParser().parse(new FileReader(new File(Util.baseDir + File.separator + "config.json")));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InvalidSyntaxException e) {

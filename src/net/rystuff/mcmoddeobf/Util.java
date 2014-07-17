@@ -36,8 +36,6 @@ public class Util {
     // Input file
     public static File inputZipFile;
 
-    public static JsonRootNode config;
-
     public static String[] getMCVersions(JsonRootNode config) {
         List<JsonNode> versionNodes = config.getArrayNode("mcVersions");
         String[] versions = new String[versionNodes.size()];
