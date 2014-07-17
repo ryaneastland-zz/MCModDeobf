@@ -1,12 +1,18 @@
 package net.rystuff.mcmoddeobf;
 
+import argo.jdom.*;
+import argo.saj.InvalidSyntaxException;
 import net.rystuff.mcmoddeobf.gui.GuiMain;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import sun.org.mozilla.javascript.internal.json.JsonParser;
 
 import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class Util {
 
@@ -34,6 +40,18 @@ public class Util {
 
     // Input file
     public static File inputZipFile;
+
+    public static JsonRootNode config;
+
+    public static String[] getMCVersions(JsonRootNode config) {
+        List<JsonNode> versionNodes = config.getArrayNode("mcVersions");
+        String[] versions = new String[versionNodes.size()];
+        for (int i = 0; i < versionNodes.size(); i++) {
+            versions[i] = versionNodes.get(i).getStringValue();
+            System.out.println(versions[i]);
+        }
+        return versions;
+    }
 
     // Initialization function
     public static void init() {
@@ -64,20 +82,31 @@ public class Util {
         }
         decompFile.mkdir();
         deobfFile.mkdir();
+
+        List<JsonNode> versionNodes = MCModDeobf.config.getArrayNode("mcVersions");
+        String[] versions = new String[versionNodes.size()];
+        for (int i = 0; i < versionNodes.size(); i++) {
+            versions[i] = versionNodes.get(i).getStringValue();
+            if (!new File(baseDir + File.separator + versions[i] + File.separator + "fields.csv").exists()) {
+                download("http://rystuff.net/downloads/deobf/" + versions[i] + "/fields.csv", baseDir + File.separator + versions[i] + File.separator + "fields.csv");
+            }
+            if (!new File(baseDir + File.separator + versions[i] + File.separator + "methods.csv").exists()) {
+                download("http://rystuff.net/downloads/deobf/" + versions[i] + "/methods.csv", baseDir + File.separator + versions[i] + File.separator + "methods.csv");
+            }
+            if (!new File(baseDir + File.separator + versions[i] + File.separator + "params.csv").exists()) {
+                download("http://rystuff.net/downloads/deobf/" + versions[i] + "/params.csv", baseDir + File.separator + versions[i] + File.separator + "params.csv");
+            }
+        }
     }
 
     // This is the download function for use in other places
-    public static boolean download(String url, String dest)
-    {
-        try
-        {
+    public static boolean download(String url, String dest) {
+        try {
             System.out.println("Downloading " + url + " to " + dest);
             FileUtils.copyURLToFile(new URL(url), new File(dest));
             System.out.println("Downloaded " + url + " to " + dest);
             return true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e);
             return false;
         }
@@ -91,7 +120,7 @@ public class Util {
             // runs the decompiler on the selected archive file
             Process p = Runtime.getRuntime().exec("java -jar " + decompilerString + " -jar " + inputZipFile + " -o " + decompString);
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            while ((line = input.readLine()) != null){
+            while ((line = input.readLine()) != null) {
                 System.out.println(line);
             }
         } catch (IOException e) {
@@ -101,21 +130,50 @@ public class Util {
     }
 
     public static void deobf() throws IOException {
-        File dir = new File(decompString);
-
-        System.out.println("Getting all files in " + dir.getCanonicalPath() + " including those in subdirectories");
-        List<File> files = (List<File>) FileUtils.listFiles(dir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        System.out.println("Getting all files in " + decompFile.getCanonicalPath() + " including those in subdirectories");
+        List<File> files = (List<File>) FileUtils.listFiles(decompFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
         for (File file : files) {
             System.out.println("file: " + file.getCanonicalPath());
             try {
-                String csvFile  = "C:\\Users\\ryan\\Documents\\methods.csv";
+                String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "fields.csv";
                 BufferedReader br = null;
                 String line = "";
                 String csvSplitBy = ",";
                 br = new BufferedReader(new FileReader(csvFile));
                 while ((line = br.readLine()) != null) {
                     String[] split = line.split(csvSplitBy);
-                    System.out.println("Function = " + split[0] + ", name = " + split[1]);
+                    String content = FileUtils.readFileToString(new File(file.toString()));
+                    FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "methods.csv";
+                BufferedReader br = null;
+                String line = "";
+                String csvSplitBy = ",";
+                br = new BufferedReader(new FileReader(csvFile));
+                while ((line = br.readLine()) != null) {
+                    String[] split = line.split(csvSplitBy);
+                    String content = FileUtils.readFileToString(new File(file.toString()));
+                    FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "params.csv";
+                BufferedReader br = null;
+                String line = "";
+                String csvSplitBy = ",";
+                br = new BufferedReader(new FileReader(csvFile));
+                while ((line = br.readLine()) != null) {
+                    String[] split = line.split(csvSplitBy);
                     String content = FileUtils.readFileToString(new File(file.toString()));
                     FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
                 }

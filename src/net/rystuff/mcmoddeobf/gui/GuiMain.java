@@ -12,19 +12,32 @@ import java.io.IOException;
 
 public class GuiMain extends JPanel implements ActionListener {
 
+    // String of version of Minecraft to select from
+    public static String[] mcVersions = Util.getMCVersions(MCModDeobf.config);
 
-    public static String[] mcVersions = {"1.7.10", "1.7.2", "1.6.4"};
+    // The select Minecraft version
     public static String mcVersion;
 
-    public static JFileChooser outputFolder = new JFileChooser();
+    // File Chooser for the input archive
+    public static JFileChooser inputFile = new JFileChooser();
 
+    // File Chooser for the output archive
+    public static JFileChooser outputFile = new JFileChooser();
+
+    // Dropdown menu for Mineraft versions
+    public static JComboBox<String> versionDropDown = new JComboBox<String>(mcVersions);
+
+    // Buttons
     private JButton source = new JButton("Select source file zip/jar");
     private JButton run = new JButton("Deobfuscate");
     private JButton output = new JButton("Output zip");
-    public static JComboBox<String> versionDropDown = new JComboBox<String>(mcVersions);
 
+    // main Gui function
     public GuiMain(JFrame frame) {
+        // Creates new JPanel
         JPanel panel = new JPanel();
+
+        // Sets features and options for the JPanel
         panel.setLayout(new FlowLayout());
         add(new JLabel(
                 "This is a program that I made used for deobfuscating minecraft mods"));
@@ -38,30 +51,43 @@ public class GuiMain extends JPanel implements ActionListener {
     }
 
     @Override
+    // Action Handler
     public void actionPerformed(ActionEvent e) {
+        // Gets if the source select button was clicked
         if (e.getSource() == this.source) {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setAcceptAllFileFilterUsed(false);
-            chooser.setFileFilter(new FileNameExtensionFilter("Archive files" , "zip", "jar"));
-            int returnVal = chooser.showOpenDialog(null);
+            // Sets the accepted file types
+            inputFile.setAcceptAllFileFilterUsed(false);
+            inputFile.setFileFilter(new FileNameExtensionFilter("Archive files", "zip", "jar"));
+
+            // Opens the file chooser
+            int returnVal = inputFile.showOpenDialog(null);
+
+            // Save the selected file path to inputZipFile variable
             if (returnVal == 0) {
-                Util.inputZipFile = chooser.getSelectedFile();
+                Util.inputZipFile = inputFile.getSelectedFile();
             }
         }
         if (e.getSource() == this.run) {
+            // Gets the selected Minecraft version from the dropdown
             mcVersion = versionDropDown.getSelectedItem().toString();
-            if (!Util.decompilerFile.exists())
-            {
-               Util.download("https://bitbucket.org/mstrobel/procyon/downloads/procyon-decompiler-0.5.25.jar", Util.decompilerString);
-            } else {
 
+            // Checks if the decompiler exists
+            if (!Util.decompilerFile.exists()) {
+                // Downloads the decompiler if it doesn't exists
+                Util.download("https://bitbucket.org/mstrobel/procyon/downloads/procyon-decompiler-0.5.25.jar", Util.decompilerString);
             }
+
+            // Runs the Initialization function
             Util.init();
+
+            // Tries to run the Decompile function
             try {
                 Util.decompile();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
+
+            // Tries to run the Deobf function
             try {
                 Util.deobf();
             } catch (IOException e1) {
@@ -69,12 +95,16 @@ public class GuiMain extends JPanel implements ActionListener {
             }
         }
         if (e.getSource() == this.output) {
-            outputFolder.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            outputFolder.setAcceptAllFileFilterUsed(false);
-            outputFolder.setFileFilter(new FileNameExtensionFilter("Archive files" , "zip", "jar"));
-            int returnVal = outputFolder.showSaveDialog(null);
+            // Sets the accepted file types
+            outputFile.setAcceptAllFileFilterUsed(false);
+            outputFile.setFileFilter(new FileNameExtensionFilter("Archive files", "zip", "jar"));
+
+            // Opens the file chooser
+            int returnVal = outputFile.showSaveDialog(null);
+
+            // Saves the selected file path to outputZipFile variable
             if (returnVal == 0) {
-                Util.outputZipFile = outputFolder.getSelectedFile();
+                Util.outputZipFile = outputFile.getSelectedFile();
                 System.out.println(Util.outputZipFile);
             }
         }
