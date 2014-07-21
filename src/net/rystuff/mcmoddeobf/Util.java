@@ -136,7 +136,9 @@ public class Util {
                 while ((line = br.readLine()) != null) {
                     String[] split = line.split(csvSplitBy);
                     String content = FileUtils.readFileToString(new File(file.toString()));
-                    FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                    if (content.contains(split[0])) {
+                        FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -152,7 +154,9 @@ public class Util {
                 while ((line = br.readLine()) != null) {
                     String[] split = line.split(csvSplitBy);
                     String content = FileUtils.readFileToString(new File(file.toString()));
-                    FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                    if (content.contains(split[0])) {
+                        FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -168,7 +172,9 @@ public class Util {
                 while ((line = br.readLine()) != null) {
                     String[] split = line.split(csvSplitBy);
                     String content = FileUtils.readFileToString(new File(file.toString()));
-                    FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                    if (content.contains(split[0])) {
+                        FileUtils.writeStringToFile(file, content.replaceAll(split[0], split[1]));
+                    }
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
