@@ -59,7 +59,7 @@ public class GuiMain extends JPanel implements ActionListener {
 
             // Save the selected file path to inputZipFile variable
             if (returnVal == 0) {
-                Util.inputZipFile = inputFile.getSelectedFile();
+                Util.inputZip = inputFile.getSelectedFile();
             }
         }
         if (e.getSource() == this.run) {
@@ -88,6 +88,8 @@ public class GuiMain extends JPanel implements ActionListener {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+
+            Util.Zip();
         }
         if (e.getSource() == this.output) {
             // Sets the accepted file types
@@ -99,7 +101,7 @@ public class GuiMain extends JPanel implements ActionListener {
 
             // Saves the selected file path to outputZipFile variable
             if (returnVal == 0) {
-                Util.outputZipFile = outputFile.getSelectedFile();
+                Util.outputZip = outputFile.getSelectedFile();
                 System.out.println(Util.outputZipFile);
             }
         }

@@ -2,6 +2,10 @@ package net.rystuff.mcmoddeobf;
 
 import argo.jdom.JsonNode;
 import argo.jdom.JsonRootNode;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
 import net.rystuff.mcmoddeobf.gui.GuiMain;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -32,10 +36,13 @@ public class Util {
     public static File decompilerFile = new File(decompilerString);
 
     // Output zip
-    public static File outputZipFile;
+    public static File outputZip;
+
+    // Output zip ZipFile
+    public static ZipFile outputZipFile;
 
     // Input file
-    public static File inputZipFile;
+    public static File inputZip;
 
     // Get MCVersions for config
     public static String[] getMCVersions(JsonRootNode config) {
@@ -115,7 +122,7 @@ public class Util {
         try {
             String line;
             // runs the decompiler on the selected archive file
-            Process p = Runtime.getRuntime().exec("java -jar " + decompilerString + " -jar " + inputZipFile + " -o " + decompString);
+            Process p = Runtime.getRuntime().exec("java -jar " + decompilerString + " -jar " + inputZip + " -o " + decompString);
             BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
             while ((line = input.readLine()) != null) {
                 System.out.println(line);
@@ -128,10 +135,12 @@ public class Util {
 
     // Deobfuscate function
     public static void deobf() throws IOException {
+        FileUtils.copyDirectory(decompFile, deobfFile);
+        System.out.println("Deobfuscating");
         // Gets all files to deobfuscate
-        List<File> files = (List<File>) FileUtils.listFiles(decompFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        List<File> files = (List<File>) FileUtils.listFiles(deobfFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
         for (File file : files) {
-            System.out.println("file: " + file.getCanonicalPath());
+            System.out.println("Deobfuscating " + file.getCanonicalPath());
             // Fields deobf
             try {
                 String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "fields.csv";
@@ -189,6 +198,27 @@ public class Util {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        System.out.println("Deobfuscated!");
+    }
+
+    // Zipping output
+    public static void Zip() {
+        try {
+            if (outputZip.toString().toLowerCase().contains(".zip")){
+                outputZipFile = new ZipFile(outputZip);
+            } else if (outputZip.toString().toLowerCase().contains(".jar")) {
+                outputZipFile = new ZipFile(outputZip);
+            } else {
+                outputZipFile = new ZipFile(outputZip + ".zip");
+            }
+            ZipParameters parameters = new ZipParameters();
+            parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+            parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+            parameters.setIncludeRootFolder(false);
+            outputZipFile.createZipFileFromFolder(deobfFile + File.separator, parameters, true, 10485760);
+        } catch (ZipException e) {
+            e.printStackTrace();
         }
     }
 }
