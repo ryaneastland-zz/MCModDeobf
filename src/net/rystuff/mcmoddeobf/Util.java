@@ -1,6 +1,7 @@
 package net.rystuff.mcmoddeobf;
 
-import argo.jdom.*;
+import argo.jdom.JsonNode;
+import argo.jdom.JsonRootNode;
 import net.rystuff.mcmoddeobf.gui.GuiMain;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
@@ -36,6 +37,7 @@ public class Util {
     // Input file
     public static File inputZipFile;
 
+    // Get MCVersions for config
     public static String[] getMCVersions(JsonRootNode config) {
         List<JsonNode> versionNodes = config.getArrayNode("mcVersions");
         String[] versions = new String[versionNodes.size()];
@@ -76,10 +78,12 @@ public class Util {
         decompFile.mkdir();
         deobfFile.mkdir();
 
+        // Get MCVersions from config
         List<JsonNode> versionNodes = MCModDeobf.config.getArrayNode("mcVersions");
         String[] versions = new String[versionNodes.size()];
         for (int i = 0; i < versionNodes.size(); i++) {
             versions[i] = versionNodes.get(i).getStringValue();
+            // if csv files doesn't exists then download them
             if (!new File(baseDir + File.separator + versions[i] + File.separator + "fields.csv").exists()) {
                 download("http://rystuff.net/downloads/deobf/" + versions[i] + "/fields.csv", baseDir + File.separator + versions[i] + File.separator + "fields.csv");
             }
@@ -122,11 +126,13 @@ public class Util {
         System.out.println("Decompiled!");
     }
 
+    // Deobfuscate function
     public static void deobf() throws IOException {
-        System.out.println("Getting all files in " + decompFile.getCanonicalPath() + " including those in subdirectories");
+        // Gets all files to deobfuscate
         List<File> files = (List<File>) FileUtils.listFiles(decompFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
         for (File file : files) {
             System.out.println("file: " + file.getCanonicalPath());
+            // Fields deobf
             try {
                 String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "fields.csv";
                 BufferedReader br = null;
@@ -145,6 +151,7 @@ public class Util {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            // Methods deobf
             try {
                 String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "methods.csv";
                 BufferedReader br = null;
@@ -163,6 +170,7 @@ public class Util {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            // Params deobf
             try {
                 String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "params.csv";
                 BufferedReader br = null;

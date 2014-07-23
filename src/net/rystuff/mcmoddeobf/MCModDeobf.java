@@ -11,15 +11,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class MCModDeobf extends JFrame{
+public class MCModDeobf extends JFrame {
 
+    public static JsonRootNode config;
     // Sets the GuiMain class to a variable
     public GuiMain guimain;
 
-    public static JsonRootNode config;
-
     public MCModDeobf() {
-        if (new File(Util.baseDir + File.separator + "config.json").exists()){
+        if (new File(Util.baseDir + File.separator + "config.json").exists()) {
             new File(Util.baseDir + File.separator + "config.json").delete();
         }
         Util.download("http://rystuff.net/downloads/deobf/config.json", Util.baseDir + File.separator + "config.json");

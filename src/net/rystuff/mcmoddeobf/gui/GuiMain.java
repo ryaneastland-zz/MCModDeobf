@@ -14,19 +14,14 @@ public class GuiMain extends JPanel implements ActionListener {
 
     // String of version of Minecraft to select from
     public static String[] mcVersions = Util.getMCVersions(MCModDeobf.config);
-
-    // The select Minecraft version
-    public static String mcVersion;
-
-    // File Chooser for the input archive
-    public static JFileChooser inputFile = new JFileChooser();
-
-    // File Chooser for the output archive
-    public static JFileChooser outputFile = new JFileChooser();
-
     // Dropdown menu for Mineraft versions
     public static JComboBox<String> versionDropDown = new JComboBox<String>(mcVersions);
-
+    // The select Minecraft version
+    public static String mcVersion;
+    // File Chooser for the input archive
+    public static JFileChooser inputFile = new JFileChooser();
+    // File Chooser for the output archive
+    public static JFileChooser outputFile = new JFileChooser();
     // Buttons
     private JButton source = new JButton("Select source file zip/jar");
     private JButton run = new JButton("Deobfuscate");
