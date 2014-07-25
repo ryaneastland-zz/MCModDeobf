@@ -69,26 +69,19 @@ public class GuiMain extends JPanel implements ActionListener {
             // Checks if the decompiler exists
             if (!Util.decompilerFile.exists()) {
                 // Downloads the decompiler if it doesn't exists
-                Util.download("https://bitbucket.org/mstrobel/procyon/downloads/procyon-decompiler-0.5.25.jar", Util.decompilerString);
+                Util.download(Util.decompilerDownload(MCModDeobf.config), Util.decompilerString);
             }
 
             // Runs the Initialization function
             Util.init();
 
-            // Tries to run the Decompile function
-            try {
-                Util.decompile();
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
+            // Runs the Decompile function
+            Util.decompile();
 
-            // Tries to run the Deobf function
-            try {
-                Util.deobf();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            // Runs the Deobf function
+            Util.deobf();
 
+            // Runs the Zip function
             Util.Zip();
         }
         if (e.getSource() == this.output) {

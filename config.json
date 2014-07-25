@@ -2,7 +2,8 @@
     "mcVersions":
     [
         "1.7.10",
-        "1.7.2"
+        "1.7.2",
+        "1.6.4"
     ],
-    "csv": "http://rystuff.net/downloads/deobf/version/"
+    "decompiler": "https://bitbucket.org/mstrobel/procyon/downloads/procyon-decompiler-0.5.25.jar"
 }

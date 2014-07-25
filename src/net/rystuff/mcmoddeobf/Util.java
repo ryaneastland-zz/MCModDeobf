@@ -55,6 +55,12 @@ public class Util {
         return versions;
     }
 
+    // Gets the decompiler download link
+    public static String decompilerDownload(JsonRootNode config) {
+        String decompiler = config.getStringValue("decompiler");
+        return decompiler;
+    }
+
     // Initialization function
     public static void init() {
         // Prints out MCModDeobf temp directory location
@@ -117,7 +123,7 @@ public class Util {
     }
 
     // Decompile function
-    public static void decompile() throws Exception {
+    public static void decompile() {
         System.out.println("Decompiling");
         try {
             String line;
@@ -134,13 +140,21 @@ public class Util {
     }
 
     // Deobfuscate function
-    public static void deobf() throws IOException {
-        FileUtils.copyDirectory(decompFile, deobfFile);
+    public static void deobf() {
+        try {
+            FileUtils.copyDirectory(decompFile, deobfFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("Deobfuscating");
         // Gets all files to deobfuscate
         List<File> files = (List<File>) FileUtils.listFiles(deobfFile, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
         for (File file : files) {
-            System.out.println("Deobfuscating " + file.getCanonicalPath());
+            try {
+                System.out.println("Deobfuscating " + file.getCanonicalPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             // Fields deobf
             try {
                 String csvFile = baseDir + File.separator + GuiMain.mcVersion + File.separator + "fields.csv";
