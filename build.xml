@@ -9,7 +9,7 @@
     <property name="classes.dir" value="${compile.dir}/classes"/>
     <property name="manifest.file" value="${build.dir}/MANIFEST.MF"/>
     <property name="release.dir" value="${build.dir}/release"/>
-    <property name="jar.file" value="${release.dir}/Deobf-${version}.jar"/>
+    <property name="jar.file" value="${release.dir}/Deobf-${version}-Beta.jar"/>
 
     <path id="external.libs">
         <fileset dir="${libs.dir}" includes="**/*.jar"/>
