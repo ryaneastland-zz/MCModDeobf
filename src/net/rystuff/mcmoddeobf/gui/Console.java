@@ -22,7 +22,7 @@ public class Console extends WindowAdapter implements WindowListener, Runnable
     public PipedInputStream inputStream0 = new PipedInputStream();
     public PipedInputStream inputStream1 = new PipedInputStream();
     
-    public Console();
+    public Console()
     {
         frame = new JFrame("Console");
         frame.setSize(560, 300);
@@ -102,7 +102,7 @@ public class Console extends WindowAdapter implements WindowListener, Runnable
 
     public synchronized void windowClosing(WindowEvent evt)
     {
-        if (!MCModDeobf.instance.isVisible()) JurassicLauncher.instance.setVisible(true);
+        if (!MCModDeobf.instance.isVisible()) MCModDeobf.instance.setVisible(true);
         frame.setVisible(false);
         frame.dispose();
     }
@@ -126,7 +126,6 @@ public class Console extends WindowAdapter implements WindowListener, Runnable
                     int link = textArea.getDocument().getLength();
                     textArea.append(input);
                     textArea.setCaretPosition(link + 1);
-                    if (!pastebin.isEnabled()) pastebin.setEnabled(true);
                 }
                 if (quit) return;
             }
@@ -146,7 +145,6 @@ public class Console extends WindowAdapter implements WindowListener, Runnable
                     int link = textArea.getDocument().getLength();
                     textArea.append(input);
                     textArea.setCaretPosition(link + 1);
-                    if (!pastebin.isEnabled()) pastebin.setEnabled(true);
                 }
                 if (quit) return;
             }

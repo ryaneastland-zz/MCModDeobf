@@ -3,6 +3,7 @@ package net.rystuff.mcmoddeobf;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;
 import argo.saj.InvalidSyntaxException;
+import net.rystuff.mcmoddeobf.gui.Console;
 import net.rystuff.mcmoddeobf.gui.GuiMain;
 
 import javax.swing.*;
