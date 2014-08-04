@@ -2,7 +2,6 @@ package net.rystuff.mcmoddeobf.gui;
 
 import argo.jdom.JsonNode;
 import net.rystuff.mcmoddeobf.MCModDeobf;
-import to.uk.ilexiconn.jpastebin.pastebin.Pastebin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +11,7 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
 
-public class Console extends WindowAdapter implements ITask, WindowListener, ActionListener, Runnable
+public class Console extends WindowAdapter implements WindowListener, Runnable
 {
     public JFrame frame;
     public JTextArea textArea;
@@ -22,17 +21,10 @@ public class Console extends WindowAdapter implements ITask, WindowListener, Act
 
     public PipedInputStream inputStream0 = new PipedInputStream();
     public PipedInputStream inputStream1 = new PipedInputStream();
-
-    public JButton pastebin;
-
-    public String getTaskName()
+    
+    public Console();
     {
-        return "Starting console...";
-    }
-
-    public void run(JsonNode config)
-    {
-        frame = new JFrame("JurassicLauncher Console");
+        frame = new JFrame("Console");
         frame.setSize(560, 300);
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         int x = screen.width / 2 - 560 - 128;
@@ -42,16 +34,11 @@ public class Console extends WindowAdapter implements ITask, WindowListener, Act
         textArea = new JTextArea();
         textArea.setEditable(false);
 
-        pastebin = new JButton("Export to Pastebin");
-        pastebin.setEnabled(false);
-
         frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().add(new JScrollPane(textArea), BorderLayout.CENTER);
-        frame.getContentPane().add(pastebin, BorderLayout.SOUTH);
         frame.setVisible(true);
 
         frame.addWindowListener(this);
-        pastebin.addActionListener(this);
 
         try
         {
@@ -118,18 +105,6 @@ public class Console extends WindowAdapter implements ITask, WindowListener, Act
         if (!MCModDeobf.instance.isVisible()) JurassicLauncher.instance.setVisible(true);
         frame.setVisible(false);
         frame.dispose();
-    }
-
-    public synchronized void actionPerformed(ActionEvent evt)
-    {
-        try
-        {
-            System.out.println("Here's the link: " + Pastebin.newPaste("8afcfd7341c9fd9d87a52783657f5759", textArea.getText(), "JurassicLauncher Log").paste().getLink());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
     }
 
     public synchronized void run()
