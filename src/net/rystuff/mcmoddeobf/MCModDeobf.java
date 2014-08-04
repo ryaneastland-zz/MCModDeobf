@@ -18,6 +18,9 @@ public class MCModDeobf extends JFrame {
     public GuiMain guimain;
 
     public MCModDeobf() {
+        
+        new Console();
+        
         if (new File(Util.baseDir + File.separator + "config.json").exists()) {
             // new File(Util.baseDir + File.separator + "config.json").delete();
         }
