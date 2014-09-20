@@ -98,13 +98,13 @@ public class Util {
             versions[i] = versionNodes.get(i).getStringValue();
             // if csv files doesn't exists then download them
             if (!new File(baseDir + File.separator + versions[i] + File.separator + "fields.csv").exists()) {
-                download("http://rystuff.net/downloads/deobf/" + versions[i] + "/fields.csv", baseDir + File.separator + versions[i] + File.separator + "fields.csv");
+                download("http://rystuff.net/data/MCModDeobf/" + versions[i] + "/fields.csv", baseDir + File.separator + versions[i] + File.separator + "fields.csv");
             }
             if (!new File(baseDir + File.separator + versions[i] + File.separator + "methods.csv").exists()) {
-                download("http://rystuff.net/downloads/deobf/" + versions[i] + "/methods.csv", baseDir + File.separator + versions[i] + File.separator + "methods.csv");
+                download("http://rystuff.net/data/MCModDeobf/" + versions[i] + "/methods.csv", baseDir + File.separator + versions[i] + File.separator + "methods.csv");
             }
             if (!new File(baseDir + File.separator + versions[i] + File.separator + "params.csv").exists()) {
-                download("http://rystuff.net/downloads/deobf/" + versions[i] + "/params.csv", baseDir + File.separator + versions[i] + File.separator + "params.csv");
+                download("http://rystuff.net/data/MCModDeobf/" + versions[i] + "/params.csv", baseDir + File.separator + versions[i] + File.separator + "params.csv");
             }
         }
     }
