@@ -21,6 +21,7 @@
     </path>
 
     <target name="init">
+        <delete dir="${build.dir}"/>
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${libs.dir}"/>
         <mkdir dir="${compile.dir}"/>
