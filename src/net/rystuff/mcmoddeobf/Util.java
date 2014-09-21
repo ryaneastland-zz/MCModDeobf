@@ -124,26 +124,19 @@ public class Util {
 
     // Decompile function
     public static void decompile() {
-        new Thread()
-        {
-            public void run()
-            {
-                System.out.println("Decompiling");
-                try
-                {
-                    String line;
-                    // runs the decompiler on the selected archive file
-                    Process p = Runtime.getRuntime().exec("java -jar " + decompilerString + " -jar " + inputZip + " -o " + decompString);
-                    BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                    while ((line = input.readLine()) != null) System.out.println(line);
-                }
-                catch (IOException e) 
-                {
-                    e.printStackTrace();
-                }
-                System.out.println("Done!");
+        System.out.println("Decompiling");
+        try {
+            String line;
+            // runs the decompiler on the selected archive file
+            Process p = Runtime.getRuntime().exec("java -jar " + decompilerString + " -jar " + inputZip + " -o " + decompString);
+            BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            while ((line = input.readLine()) != null) {
+                System.out.println(line);
             }
-        }.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Decompiled!");
     }
 
     // Deobfuscate function
