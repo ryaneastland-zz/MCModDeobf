@@ -3,6 +3,7 @@ package net.rystuff.mcmoddeobf;
 import argo.jdom.JdomParser;
 import argo.jdom.JsonRootNode;
 import argo.saj.InvalidSyntaxException;
+import net.rystuff.mcmoddeobf.gui.Console;
 import net.rystuff.mcmoddeobf.gui.GuiMain;
 
 import javax.swing.*;
@@ -14,12 +15,16 @@ import java.io.IOException;
 public class MCModDeobf extends JFrame {
 
     public static JsonRootNode config;
+    public static MCModDeobf instance;
     // Sets the GuiMain class to a variable
     public GuiMain guimain;
+    public Console console;
 
     public MCModDeobf() {
+        instance = this;
+        new Console();
         if (new File(Util.baseDir + File.separator + "config.json").exists()) {
-            new File(Util.baseDir + File.separator + "config.json").delete();
+            // new File(Util.baseDir + File.separator + "config.json").delete();
         }
         Util.download("http://rystuff.net/data/MCModDeobf/config.json", Util.baseDir + File.separator + "config.json");
         try {
@@ -30,6 +35,7 @@ public class MCModDeobf extends JFrame {
             e.printStackTrace();
         }
         // Creates a new JFrame
+        instance = this;
         guimain = new GuiMain(this);
         setTitle("MC Mod Deobf");
         setSize(550, 200);
