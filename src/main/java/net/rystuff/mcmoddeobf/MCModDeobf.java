@@ -26,7 +26,7 @@ public class MCModDeobf extends JFrame {
         if (new File(Util.baseDir + File.separator + "config.json").exists()) {
             // new File(Util.baseDir + File.separator + "config.json").delete();
         }
-        Util.download("http://rystuff.net/data/MCModDeobf/config.json", Util.baseDir + File.separator + "config.json");
+        Util.download("https://raw.githubusercontent.com/Rydog101/MCModDeobf/master/config.json", Util.baseDir + File.separator + "config.json");
         try {
             config = new JdomParser().parse(new FileReader(new File(Util.baseDir + File.separator + "config.json")));
         } catch (IOException e) {
