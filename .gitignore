@@ -1,4 +1,6 @@
-libs/
 .idea/
-out/
+.gradle/
+gradle/
 *.iml
+*.ipr
+*.iws

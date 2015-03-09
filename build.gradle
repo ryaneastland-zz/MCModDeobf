@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+configurations
+        {
+            provided
+            provided.extendsFrom(compile)
+        }
+
+repositories
+        {
+            mavenCentral()
+        }
+
+dependencies
+        {
+            provided 'commons-io:commons-io:2.4'
+            provided 'net.sourceforge.argo:argo:3.12'
+            provided 'net.lingala.zip4j:zip4j:1.3.2'
+        }
+
+idea
+        {
+            module
+                    {
+                        name = 'MCModDeobf'
+                        scopes.PROVIDED.plus += [ configurations.provided ]
+                        downloadJavadoc = true
+                        downloadSources = true
+                    }
+        }
