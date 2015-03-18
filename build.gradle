@@ -1,31 +1,38 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
 
-configurations
-        {
-            provided
-            provided.extendsFrom(compile)
-        }
+repositories {
+    mavenCentral()
+}
 
-repositories
-        {
-            mavenCentral()
-        }
+dependencies {
+    compile 'commons-io:commons-io:2.4'
+    compile 'net.sourceforge.argo:argo:3.12'
+    compile 'net.lingala.zip4j:zip4j:1.3.2'
+}
 
-dependencies
-        {
-            provided 'commons-io:commons-io:2.4'
-            provided 'net.sourceforge.argo:argo:3.12'
-            provided 'net.lingala.zip4j:zip4j:1.3.2'
-        }
+idea {
+    module {
+        name = 'MCModDeobf'
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
 
-idea
-        {
-            module
-                    {
-                        name = 'MCModDeobf'
-                        scopes.PROVIDED.plus += [ configurations.provided ]
-                        downloadJavadoc = true
-                        downloadSources = true
-                    }
-        }
+mainClassName  = 'net.rystuff.mcmoddeobf.MCModDeobf'
+
+version = '1.0'
+
+task uberjar(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from {configurations.compile.collect {zipTree(it)}} {
+        exclude "META-INF/*.SF"
+        exclude "META-INF/*.DSA"
+        exclude "META-INF/*.RSA"
+    }
+
+    manifest {
+        attributes 'Main-Class': 'net.rystuff.mcmoddeobf.MCModDeobf'
+    }
+}
